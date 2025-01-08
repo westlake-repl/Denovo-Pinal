@@ -23,7 +23,7 @@ T2struc_NAMES=[
 SAPROT_NAMES=[
     "SaProtT"
 ]
-MODEL_ROOT = os.environ.get("PINAL_MODEL_ROOT", "weights")
+MODEL_ROOT = os.environ.get("PINAL_MODEL_ROOT", "weights/Pinal")
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 T2STRUCT = os.environ.get("DEFAULT_MODEL_T2STRUCT", "pytorch_model.bin")
 T2struc_NAME = os.environ.get("T2struc_NAME", "T2struc-1.2B")
