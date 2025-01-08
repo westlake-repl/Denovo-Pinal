@@ -1,0 +1,5 @@
+omegaconf==2.3.0
+rich==13.9.4
+torch==2.2.1
+transformers==4.39.0
+deepspeed==0.14.0

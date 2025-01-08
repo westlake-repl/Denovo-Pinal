@@ -1,0 +1,27 @@
+{
+    "architectures": [
+      "EsmForMaskedLM"
+    ],
+    "attention_probs_dropout_prob": 0.1,
+    "classifier_dropout": null,
+    "emb_layer_norm_before": false,
+    "hidden_act": "gelu",
+    "hidden_dropout_prob": 0.1,
+    "hidden_size": 1280,
+    "initializer_range": 0.02,
+    "intermediate_size": 5120,
+    "layer_norm_eps": 1e-05,
+    "mask_token_id": 4,
+    "max_position_embeddings": 1026,
+    "model_type": "esm",
+    "num_attention_heads": 20,
+    "num_hidden_layers": 33,
+    "pad_token_id": 1,
+    "position_embedding_type": "rotary",
+    "token_dropout": true,
+    "torch_dtype": "float32",
+    "transformers_version": "4.23.0.dev0",
+    "use_cache": true,
+    "vocab_size": 446
+  }
+  
