@@ -10,23 +10,16 @@ from rich.logging import RichHandler
 import math
 from models import StructureTokenPredictionModel, SaProtIFModel
 
-FORMAT = "%(message)s"
-logging.basicConfig(
-    level="NOTSET", format=FORMAT, datefmt="[%X]", handlers=[RichHandler()]
-)
-
-logger = logging.getLogger("rich")
-T2struc_NAMES=[
-    "T2struc-1.2B", 
-    "T2struc-15B",
-]
-SAPROT_NAMES=[
-    "SaProtT"
-]
+T2struc_NAMES=["T2struc-1.2B", "T2struc-15B"]
+SAPROT_NAMES=["SaProtT"]
 MODEL_ROOT = os.environ.get("PINAL_MODEL_ROOT", "weights/Pinal")
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 T2STRUCT = os.environ.get("DEFAULT_MODEL_T2STRUCT", "pytorch_model.bin")
 T2struc_NAME = os.environ.get("T2struc_NAME", "T2struc-1.2B")
+
+FORMAT = "%(message)s"
+logging.basicConfig(level="NOTSET", format=FORMAT, datefmt="[%X]", handlers=[RichHandler()])
+logger = logging.getLogger("rich")
 
 TO_LIST = lambda seq: [
             seq[i, ...].detach().cpu().numpy().tolist() for i in range(seq.shape[0])
@@ -34,7 +27,22 @@ TO_LIST = lambda seq: [
 
 def load_T2Struc(cfg, model_name):
     model =  StructureTokenPredictionModel(cfg.model).to(torch.bfloat16) # Since we train the model with bfloat16
+
+    model_path = os.path.join(MODEL_ROOT, model_name, T2STRUCT)
+    if not os.path.exists(model_path):    
+        model_dir = os.path.join(MODEL_ROOT, model_name)
+        files = [f for f in os.listdir(model_dir) if f.startswith("pytorch_model_part")]
+        if len(files) == 12: # since we split the model into 12 parts
+            # call os.system cat to merge the parts
+            logger.info(f"{model_name} is split into 12 parts, merging...")
+            os.system(f"cat {model_dir}/pytorch_model_part* > {model_dir}/pytorch_model.bin")
+            logger.info(f"{model_name} merged successfully.")
+            os.system(f"rm {model_dir}/pytorch_model_part*")
+        else:
+            raise FileNotFoundError(f"Model {model_name} not found.")
+
     model.load_state_dict(torch.load(os.path.join(MODEL_ROOT, model_name, T2STRUCT), map_location='cpu'))
+
     return model.to(DEVICE)
     
     
@@ -208,7 +216,7 @@ def desc_sanity_check(desc):
 def PinalDesign(desc, num):
     logger.info("Start designing...")
     global t2struc, text_tokenizer, structre_tokenizer, saprot, saprot_text_tokenizer, saprot_tokenizer
-    assert t2struc and text_tokenizer and structre_tokenizer and saprot and saprot_text_tokenizer and saprot_tokenizer
+    assert t2struc and text_tokenizer and structre_tokenizer and saprot and saprot_text_tokenizer and saprot_tokenizer, "Please call load_pinal() to load Pinal first."
 
     desc = desc_sanity_check(desc)
     structures, structures_logp, sequences, sequences_logp = [], [], [], []

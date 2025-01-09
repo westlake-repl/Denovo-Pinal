@@ -11,6 +11,7 @@ Quickly try our online server [here](http://www.denovo-pinal.com/)
 
 If you have any questions about the paper or the code, feel free to raise an issue!
 
+> Note: The training code is coming soon!
 
 ### Environment setup
 
