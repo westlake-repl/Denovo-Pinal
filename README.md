@@ -7,11 +7,11 @@
 
 The repository is an official implementation of Pinal: [Toward De Novo Protein Design from Natural Language](https://www.biorxiv.org/content/10.1101/2024.08.01.606258)
 
-Quickly try our online server [here](http://www.denovo-pinal.com/)
+Quickly try our online server (16B) [here](http://www.denovo-pinal.com/)
 
 If you have any questions about the paper or the code, feel free to raise an issue!
 
-> Note: The training code is coming soon!
+> Note: The fine-tuning code is coming soon!
 
 ### Environment setup
 
