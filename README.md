@@ -11,8 +11,6 @@ Quickly try our online server (16B) [here](http://www.denovo-pinal.com/)
 
 If you have any questions about the paper or the code, feel free to raise an issue!
 
-> Note: The fine-tuning code is coming soon!
-
 ### Environment setup
 
 Create and activate a new conda environment with Python 3.8.
