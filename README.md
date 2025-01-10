@@ -23,7 +23,7 @@ pip install -r requirements.txt
 
 ### Download model weights
 
-We provide a script to download the pre-trained model weights, as shown below. Please download all files and put them in the `weight` directory, e.g., `weights/Pinal/...`
+We provide a script to download the pre-trained model weights, as shown below. Please download all files and put them in the `weights` directory, e.g., `weights/Pinal/...`
 
 
 ```shell
@@ -31,6 +31,16 @@ huggingface-cli download westlake-repl/Pinal \
                          --repo-type model \
                          --local-dir weights/
 ```
+
+#### Model checkpoints
+
+The `weights` directory contains 3 models:
+
+|**Name** |**Size** |
+|---------|---------|
+|[SaProt-T](https://huggingface.co/westlake-repl/Pinal/tree/main/SaProtT) | 760M |
+|[T2struc-1.2B](https://huggingface.co/westlake-repl/Pinal/tree/main/T2struc-1.2B) | 1.2B |
+|[T2struc-15B](https://huggingface.co/westlake-repl/Pinal/tree/main/T2struc-15B) | 15B |
 
 
 ### Inference with Pinal
