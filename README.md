@@ -3,7 +3,7 @@
 <a href="https://www.biorxiv.org/content/10.1101/2024.08.01.606258"><img src="https://img.shields.io/badge/Paper-bioRxiv-green" style="max-width: 100%;"></a>
 <a href="http://www.denovo-pinal.com/"><img src="https://img.shields.io/badge/Pinal-red?label=Server" style="max-width: 100%;"></a>
 <a href="https://huggingface.co/westlake-repl/Pinal"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-yellow?label=Model" style="max-width: 100%;"></a>
-
+<a href="https://x.com/duguyuan/status/1877623852299096198"><img src="https://img.shields.io/badge/X-black?label=Post" style="max-width: 100%;"></a>
 
 The repository is an official implementation of Pinal: [Toward De Novo Protein Design from Natural Language](https://www.biorxiv.org/content/10.1101/2024.08.01.606258)
 
