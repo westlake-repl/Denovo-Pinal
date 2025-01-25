@@ -167,7 +167,7 @@ def SaProtPrepareGenerationInputs(structures, desc, saprot_text_tokenizer, sapro
             "prot_ids": None
         }
 
-def SaProtGeneration(saprot, SaProtInputDict):
+def SaProtGeneration(saprot, SaProtInputDict, saprot_tokenizer):
     with torch.no_grad():
         out = saprot(SaProtInputDict)
     logits = out["outputs"].logits
@@ -232,7 +232,7 @@ def PinalDesign(desc, num):
         
         ## SaProt-T
         SaProtInputDict = SaProtPrepareGenerationInputs(t2struc_res["structure"], desc, saprot_text_tokenizer, saprot_tokenizer)
-        saprot_res = SaProtGeneration(saprot, SaProtInputDict)        
+        saprot_res = SaProtGeneration(saprot, SaProtInputDict, saprot_tokenizer)        
         sequences.extend(saprot_res["sequence"])
         sequences_logp.extend(saprot_res["sequence_logp"])
         logger.info(f"{i + math.ceil(500 / num)} % Sequence Designed Done")

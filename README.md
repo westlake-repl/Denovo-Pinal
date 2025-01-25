@@ -62,6 +62,29 @@ os.environ["T2struc_NAME"] = "T2struc-15B"
 ```
 > Warning: Inferencing with T2struc-15B requires at least 40GB GPU memory.
 
+### Predicting amino acid sequence with SaProt-T
+
+Here, we provide a script for predicting amino acid sequences using natural language, enabling you to specify the desired structure.
+
+```python
+from utils.design_utils import SaProtPrepareGenerationInputs, SaProtGeneration, load_SaProtT_and_tokenizers
+desc = "Actin."
+saprot, saprot_text_tokenizer, saprot_tokenizer = load_SaProtT_and_tokenizers()
+structure = "dqdppafakewedfqfwifidtfpdqggqdifgqkkwafpdpppcvppdddridgtvrrvvvvvgtdmdgqdalqagpdpvsvlvvvvcvdcprvnhqqlnheyeyegaapydlvrllsvvccscpvsvhqwyayaylqlllcvlvvdqfawefaaalqwtkiwggdnsdtdnqlididrdhnvlllvllqvvvvvvvdhqddpnssvvssvcqlpqaaadldlvvqvvclvvdqpskdwdqdpvrdididtssrhvslccqcvvvsvvdpdhhslvsnvsslvsddpvrslvhqchyeyaysrvqhhcpqsnsqvsncvvddvphdgdydydnvrncssvssvsplspdpvnpvlidgsvncvvppssvnvvrhd"
+SaProtInputDict = SaProtPrepareGenerationInputs([" ".join(list(structure))], desc, saprot_text_tokenizer, saprot_tokenizer)
+seq = SaProtGeneration(saprot, SaProtInputDict, saprot_tokenizer)["sequence"]
+print(seq)
+```
+
+The above code makes predictions based on Foldseek tokens. If you want to convert a 3D structure file (e.g., .pdb or .mmcif) into Foldseek tokens, you should download the binary file from [here](https://drive.google.com/file/d/1B_9t3n_nlj8Y3Kpc_mMjtMdY0OPYa7Re/view) and place it in the assets/bin folder. The following code demonstrates how to use it.
+```python
+from utils.foldseek_utils import get_struc_seq
+pdb_path = "assets/8ac8.cif"
+# Extract the "A" chain from the pdb file and encode it into a struc_seq
+foldseek_seq = get_struc_seq("assets/bin/foldseek", pdb_path, ["A"])["A"][1].lower()
+print(f"foldseek_seq: {foldseek_seq}")
+```
+
 
 ### Computational evaluation of the de novo designed proteins
 
