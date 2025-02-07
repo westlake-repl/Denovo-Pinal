@@ -83,6 +83,7 @@ pdb_path = "assets/8ac8.cif"
 # Extract the "A" chain from the pdb file and encode it into a struc_seq
 foldseek_seq = get_struc_seq("assets/bin/foldseek", pdb_path, ["A"])["A"][1].lower()
 print(f"foldseek_seq: {foldseek_seq}")
+# foldseek_seq: dfqka...ggvvd
 ```
 
 
