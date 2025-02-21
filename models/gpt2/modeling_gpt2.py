@@ -94,7 +94,7 @@ class GenerateDecoderOnlyOutputPinal(ModelOutput):
     attentions: Optional[Tuple[Tuple[torch.FloatTensor]]] = None
     hidden_states: Optional[Tuple[Tuple[torch.FloatTensor]]] = None
     past_key_values: Optional[Tuple[Tuple[Tuple[torch.FloatTensor]]]] = None
-
+    log_p: Optional[torch.FloatTensor] = None
 
 logger = logging.get_logger(__name__)
 
@@ -1401,7 +1401,7 @@ class GPT2LMHeadModel(GPT2PreTrainedModel):
                     past_key_values=model_kwargs.get("past_key_values"),
                 )
             else:
-                return GenerateDecoderOnlyOutput(
+                return GenerateDecoderOnlyOutputPinal(
                     sequences=input_ids,
                     scores=scores,
                     logits=raw_logits,
