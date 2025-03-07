@@ -13,6 +13,8 @@ Also try [SaProt-T](http://113.45.254.183:9527/)
 
 If you have any questions about the paper or the code, feel free to raise an issue!
 
+> We have 2 PhD positions for international students at Westlake University, China! see [here](https://x.com/duguyuan/status/1897101692665258245).  
+
 ### Environment setup
 
 Create and activate a new conda environment with Python 3.8.
