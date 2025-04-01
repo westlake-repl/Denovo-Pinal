@@ -9,7 +9,7 @@ The repository is an official implementation of Pinal: [Toward De Novo Protein D
 
 Quickly try our online server (Pinal 16B) [here](http://www.denovo-pinal.com/)
 
-Also try [SaProt-T](http://113.45.254.183:9527/)
+Also try [SaProt-T/SaProt-O](http://113.45.254.183:9527/)
 
 If you have any questions about the paper or the code, feel free to raise an issue!
 
@@ -42,7 +42,8 @@ The `weights` directory contains 3 models:
 
 |**Name** |**Size** |
 |---------|---------|
-|[SaProt-T](https://huggingface.co/westlake-repl/Pinal/tree/main/SaProtT) | 760M |
+|[SaProt-T](https://huggingface.co/westlake-repl/Pinal/tree/main/SaProt-T) | 760M |
+|[SaProt-O](https://huggingface.co/westlake-repl/Pinal/tree/main/SaProt-O) | 760M |
 |[T2struc-1.2B](https://huggingface.co/westlake-repl/Pinal/tree/main/T2struc-1.2B) | 1.2B |
 |[T2struc-15B](https://huggingface.co/westlake-repl/Pinal/tree/main/T2struc-15B) | 15B |
 
