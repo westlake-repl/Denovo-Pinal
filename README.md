@@ -38,7 +38,7 @@ huggingface-cli download westlake-repl/Pinal \
 
 #### Model checkpoints
 
-The `weights` directory contains 3 models:
+The `weights` directory contains 4 models:
 
 |**Name** |**Size** |
 |---------|---------|
