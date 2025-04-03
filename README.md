@@ -9,7 +9,7 @@ The repository is an official implementation of Pinal: [Toward De Novo Protein D
 
 Quickly try our online server (Pinal 16B) [here](http://www.denovo-pinal.com/)
 
-Also try [SaProt-T/SaProt-O](http://113.45.254.183:9527/)
+Also try [SaProt-T/SaProt-O](http://113.45.254.183:9527/) for redesign/edit
 
 If you have any questions about the paper or the code, feel free to raise an issue!
 
