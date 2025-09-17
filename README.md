@@ -5,7 +5,7 @@
 <a href="https://huggingface.co/westlake-repl/Pinal"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-yellow?label=Model" style="max-width: 100%;"></a>
 <a href="https://x.com/duguyuan/status/1877623852299096198"><img src="https://img.shields.io/badge/X-black?label=Post" style="max-width: 100%;"></a>
 
-The repository is an official implementation of Pinal: [Toward De Novo Protein Design from Natural Language](https://www.biorxiv.org/content/10.1101/2024.08.01.606258v5)
+The repository is an official implementation of Pinal: [Toward De Novo Protein Design from Natural Language](https://www.biorxiv.org/content/10.1101/2024.08.01.606258v7)
 
 Quickly try our online server (Pinal 16B) [here](http://www.denovo-pinal.com/)
 
@@ -45,7 +45,7 @@ The `weights` directory contains 4 models:
 |[SaProt-T](https://huggingface.co/westlake-repl/Pinal/tree/main/SaProt-T) | 760M |
 |[SaProt-O](https://huggingface.co/westlake-repl/Pinal/tree/main/SaProt-O) | 760M |
 |[T2struc-1.2B](https://huggingface.co/westlake-repl/Pinal/tree/main/T2struc-1.2B) | 1.2B |
-|[T2struc-15B](https://huggingface.co/westlake-repl/Pinal/tree/main/T2struc-15B) | 15B |
+|[T2struc-15B](https://huggingface.co/westlake-repl/Pinal/tree/main/T2struc-15B) | 15.5B |
 
 
 ### Inference with Pinal
