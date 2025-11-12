@@ -23,7 +23,7 @@ conda create -n pinal python=3.8 --yes
 conda activate pinal
 pip install -r requirements.txt
 ```
-
+> It takes about 30 minutes to install the required packages.
 
 ### Download model weights
 
@@ -65,7 +65,7 @@ The above code will generate 10 de novo designed proteins based on the input des
 import os
 os.environ["T2struc_NAME"] = "T2struc-15B"
 ```
-> Warning: Inferencing with T2struc-15B requires at least 40GB GPU memory.
+> Warning: Inferencing with T2struc-15B requires at least 40GB GPU memory. On a single NVIDIA A40 GPU, designing 10 proteins takes approximately 1 minute. 
 
 ### Predicting amino acid sequence with SaProt-T
 
