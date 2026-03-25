@@ -11,7 +11,7 @@ import math
 from models import StructureTokenPredictionModel, SaProtIFModel
 
 T2struc_NAMES=["T2struc-1.2B", "T2struc-15B"]
-SAPROT_NAMES=["SaProtT"]
+SAPROT_NAMES=["SaProt-T"]
 MODEL_ROOT = os.environ.get("PINAL_MODEL_ROOT", "weights/Pinal")
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 T2STRUCT = os.environ.get("DEFAULT_MODEL_T2STRUCT", "pytorch_model.bin")
@@ -52,7 +52,7 @@ def load_T2Struc_tokenizers(cfg):
     return text_tokenizer, structure_tokenizer
 
 
-def load_SaProtT(cfg, SaProt_name="SaProtT"):
+def load_SaProtT(cfg, SaProt_name="SaProt-T"):
     model = SaProtIFModel(cfg.model).to(torch.bfloat16)
     ckpt = torch.load(os.path.join(MODEL_ROOT, SaProt_name, "pytorch_model.bin"), map_location='cpu')
     ckpt_model = OrderedDict({k[len("module."):]: v for k, v in ckpt["state_dict"].items()})
@@ -75,7 +75,7 @@ def load_T2Struc_and_tokenizers():
     text_tokenizer, structre_tokenizer = load_T2Struc_tokenizers(cfg)
     return model, text_tokenizer, structre_tokenizer
 
-def load_SaProtT_and_tokenizers(SaProt_name="SaProtT"):
+def load_SaProtT_and_tokenizers(SaProt_name="SaProt-T"):
     assert SaProt_name in SAPROT_NAMES
     cfg = OmegaConf.load(os.path.join(MODEL_ROOT, SaProt_name, "config.yaml"))
     model = load_SaProtT(cfg, SaProt_name)
