@@ -5,11 +5,11 @@
 <a href="https://huggingface.co/westlake-repl/Pinal"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-yellow?label=Model" style="max-width: 100%;"></a>
 <a href="https://x.com/duguyuan/status/1877623852299096198"><img src="https://img.shields.io/badge/X-black?label=Post" style="max-width: 100%;"></a>
 
-The repository is an official implementation of Pinal: [Toward De Novo Protein Design from Natural Language](https://www.biorxiv.org/content/10.1101/2024.08.01.606258v3.full.pdf)
+The repository is an official implementation of Pinal: [Toward De Novo Protein Design from Natural Language](https://www.biorxiv.org/content/10.1101/2024.08.01.606258v7)
 
 Quickly try our online server (Pinal 16B) [here](http://www.denovo-pinal.com/)
 
-Also try [SaProt-T](http://113.45.254.183:9527/)
+Also try [SaProt-T/SaProt-O](http://113.45.254.183:9527/) for protein redesign/editing
 
 If you have any questions about the paper or the code, feel free to raise an issue!
 
@@ -23,7 +23,7 @@ conda create -n pinal python=3.8 --yes
 conda activate pinal
 pip install -r requirements.txt
 ```
-
+> It takes about 30 minutes to install the required packages.
 
 ### Download model weights
 
@@ -38,13 +38,14 @@ huggingface-cli download westlake-repl/Pinal \
 
 #### Model checkpoints
 
-The `weights` directory contains 3 models:
+The `weights` directory contains 4 models:
 
 |**Name** |**Size** |
 |---------|---------|
-|[SaProt-T](https://huggingface.co/westlake-repl/Pinal/tree/main/SaProtT) | 760M |
+|[SaProt-T](https://huggingface.co/westlake-repl/Pinal/tree/main/SaProt-T) | 760M |
+|[SaProt-O](https://huggingface.co/westlake-repl/Pinal/tree/main/SaProt-O) | 760M |
 |[T2struc-1.2B](https://huggingface.co/westlake-repl/Pinal/tree/main/T2struc-1.2B) | 1.2B |
-|[T2struc-15B](https://huggingface.co/westlake-repl/Pinal/tree/main/T2struc-15B) | 15B |
+|[T2struc-15B](https://huggingface.co/westlake-repl/Pinal/tree/main/T2struc-15B) | 15.5B |
 
 
 ### Inference with Pinal
@@ -64,7 +65,7 @@ The above code will generate 10 de novo designed proteins based on the input des
 import os
 os.environ["T2struc_NAME"] = "T2struc-15B"
 ```
-> Warning: Inferencing with T2struc-15B requires at least 40GB GPU memory.
+> Warning: Inferencing with T2struc-15B requires at least 40GB GPU memory. On a single NVIDIA A40 GPU, designing 10 proteins takes approximately 1 minute. 
 
 ### Predicting amino acid sequence with SaProt-T
 
@@ -101,6 +102,6 @@ For foldability, we recommend using pLDDT and PAE, outputted by [Alphafold serie
 ### Other resources
 
 - [ProTrek](https://www.biorxiv.org/content/10.1101/2024.05.30.596740v2) and its [online server](http://search-protrek.com/)
-- [Evola](https://www.biorxiv.org/content/10.1101/2025.01.05.630192v1) and its [online server](http://www.chat-protein.com/)
+- [Evolla](https://www.biorxiv.org/content/10.1101/2025.01.05.630192v1) and its [online server](http://www.chat-protein.com/)
 - [SaprotHub](https://www.biorxiv.org/content/10.1101/2024.05.24.595648v5) and its [online server](https://colab.research.google.com/github/westlake-repl/SaprotHub/blob/main/colab/SaprotHub_v2.ipynb?hl=en)
 
