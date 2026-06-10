@@ -69,7 +69,7 @@ os.environ["T2struc_NAME"] = "T2struc-15B"
 
 ### Predicting amino acid sequence with SaProt-T
 
-Here, we provide a script for predicting amino acid sequences using natural language, enabling you to specify the desired structure.
+Here, we provide a script for predicting amino acid sequences using natural language, enabling you to specify the desired structure. We support two decoding strategies: greedy decoding and temperature-controlled multinomial sampling.
 
 ```python
 from utils.design_utils import SaProtPrepareGenerationInputs, SaProtGeneration, load_SaProtT_and_tokenizers
@@ -77,8 +77,10 @@ desc = "Actin."
 saprot, saprot_text_tokenizer, saprot_tokenizer = load_SaProtT_and_tokenizers()
 structure = "dqdppafakewedfqfwifidtfpdqggqdifgqkkwafpdpppcvppdddridgtvrrvvvvvgtdmdgqdalqagpdpvsvlvvvvcvdcprvnhqqlnheyeyegaapydlvrllsvvccscpvsvhqwyayaylqlllcvlvvdqfawefaaalqwtkiwggdnsdtdnqlididrdhnvlllvllqvvvvvvvdhqddpnssvvssvcqlpqaaadldlvvqvvclvvdqpskdwdqdpvrdididtssrhvslccqcvvvsvvdpdhhslvsnvsslvsddpvrslvhqchyeyaysrvqhhcpqsnsqvsncvvddvphdgdydydnvrncssvssvsplspdpvnpvlidgsvncvvppssvnvvrhd"
 SaProtInputDict = SaProtPrepareGenerationInputs([" ".join(list(structure))], desc, saprot_text_tokenizer, saprot_tokenizer)
+## Option 1: greedy decoding
 seq = SaProtGeneration(saprot, SaProtInputDict, saprot_tokenizer)["sequence"]
-print(seq)
+## Option 2: multinomial sampling
+## seq = SaProtGeneration(saprot, SaProtInputDict, saprot_tokenizer, saprot_sample_type="multinomial", multinomial_temperature=1.0)["sequence"]
 ```
 
 The above code makes predictions based on Foldseek tokens. If you want to convert a 3D structure file (e.g., .pdb or .mmcif) into Foldseek tokens, you should download the binary file from [here](https://drive.google.com/file/d/1B_9t3n_nlj8Y3Kpc_mMjtMdY0OPYa7Re/view) and place it in the assets/bin folder. The following code demonstrates how to use it.

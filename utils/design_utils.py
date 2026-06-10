@@ -167,11 +167,15 @@ def SaProtPrepareGenerationInputs(structures, desc, saprot_text_tokenizer, sapro
             "prot_ids": None
         }
 
-def SaProtGeneration(saprot, SaProtInputDict, saprot_tokenizer):
+def SaProtGeneration(saprot, SaProtInputDict, saprot_tokenizer, saprot_sample_type="argmax", multinomial_temperature=0.1):
     with torch.no_grad():
         out = saprot(SaProtInputDict)
     logits = out["outputs"].logits
-    predicted_token = logits.argmax(-1)
+    bs, seq_len, vocab_size = logits.shape
+    if saprot_sample_type == "multinomial":
+        predicted_token = torch.multinomial(torch.softmax((logits / multinomial_temperature).reshape(-1, vocab_size), dim=-1), 1).squeeze().reshape(bs, seq_len)
+    else:
+        predicted_token = logits.argmax(-1)
     probs = nn.functional.softmax(logits, dim=-1)
     predicted_probs = torch.gather(probs, dim=-1, index=predicted_token.unsqueeze(-1)).squeeze()
     sequence_log_p = torch.sum(predicted_probs.log() * SaProtInputDict["prot_masks"], dim=-1).to(torch.float32)
