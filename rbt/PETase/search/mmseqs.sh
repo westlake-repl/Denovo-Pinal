@@ -1,0 +1,15 @@
+
+MMSEQS="/storage/yuanfajieLab/yuanfajie/my_project/WetExperiments/mmseqs_scripts/mmseqs/bin/mmseqs"
+# MMSEQS=[your_mmseqs_path]
+input_path=rbt/PETase/search/wetlab_seqs.fasta
+
+designed_seqs=rbt/PETase/outputs/petase/sequence.fasta
+
+output_path="${input_path%.fasta}_mmseqs_hit.tsv"
+echo "output to $output_path"
+$MMSEQS easy-search $input_path $designed_seqs $output_path /tmp \
+      --min-seq-id 0.5 \
+      -c 0.8 \
+      --cov-mode 0 \
+      --format-output query,target,pident,fident,nident,alnlen,qcov,tcov \
+      --threads 96

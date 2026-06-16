@@ -1,3 +1,5 @@
 __pycache__
 assets/bin
 weights
+outputs
+.vscode/settings.json
