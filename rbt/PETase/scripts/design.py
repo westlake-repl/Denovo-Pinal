@@ -8,7 +8,8 @@ import torch.distributed as dist
 from accelerate.utils import set_seed
 from datetime import timedelta
 import sys
-sys.path.append("/storage/yuanfajieLab/yuanfajie/fengyuan/Denovo-Pinal")
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../..")))
 from utils.design_utils import load_pinal, PinalDesign
 
 FORMAT = "%(message)s"

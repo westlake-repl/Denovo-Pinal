@@ -3,3 +3,4 @@ assets/bin
 weights
 outputs
 .vscode/settings.json
+rbt/PETase/search/wetlab_seqs_mmseqs_hit.tsv

@@ -1,5 +1,5 @@
 
-MMSEQS="/storage/yuanfajieLab/yuanfajie/my_project/WetExperiments/mmseqs_scripts/mmseqs/bin/mmseqs"
+MMSEQS=[place-your-own-mmseqs-path]
 # MMSEQS=[your_mmseqs_path]
 input_path=rbt/PETase/search/wetlab_seqs.fasta
 
