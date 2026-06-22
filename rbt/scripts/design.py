@@ -13,7 +13,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")
 from utils.design_utils import load_pinal, PinalDesign
 
 FORMAT = "%(message)s"
-logging.basicConfig(level="NOTSET", format=FORMAT, datefmt="[%X]", handlers=[RichHandler()])
+logging.basicConfig(level="INFO", format=FORMAT, datefmt="[%X]", handlers=[RichHandler()])
 
 
 
@@ -66,7 +66,7 @@ if __name__ == "__main__":
     res = PinalDesign(desc, design_num, t2struc, text_tokenizer, structre_tokenizer, saprot, \
                       saprot_text_tokenizer, saprot_tokenizer, args.temperature, args.saprot_sample_type, args.multinoimal_temperature)
     if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
+        os.makedirs(output_dir, exist_ok=True)
     
     # write desc to file
     if dist.is_initialized() and rank == 0:

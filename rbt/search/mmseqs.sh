@@ -1,9 +1,9 @@
 
 MMSEQS=[place-your-own-mmseqs-path]
 # MMSEQS=[your_mmseqs_path]
-input_path=rbt/PETase/search/wetlab_seqs.fasta
+input_path=rbt/search/wetlab_seqs.fasta
 
-designed_seqs=rbt/PETase/outputs/petase/sequence.fasta
+designed_seqs=rbt/outputs/petase/all_seq_token.fasta
 
 output_path="${input_path%.fasta}_mmseqs_hit.tsv"
 echo "output to $output_path"

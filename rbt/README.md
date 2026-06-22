@@ -1,29 +1,29 @@
 # For 3.1 PETases analysis
 
-Run all commands from the Denovo-Pinal repository root.
+Run all commands from the Denovo-Pinal repository root. Before running the design scripts, replace `[your_pinal_model_root]` in `rbt/scripts/*.sh` with the local Pinal model directory, for example `weights/Pinal`. The directory should contain `T2struc-15B/` and `SaProt-T/`.
 
 ## Generate designed PETase sequences
 
 ```bash
-bash rbt/PETase/scripts/petase.sh
+bash rbt/scripts/petase.sh
 ```
 
-This script generates PETase designs and gathers the outputs into sequence.fasta.
+This script generates PETase designs and gathers the outputs into all_seq_token.fasta.
 
 ## Recalculate NLL for pinalpetase36 and pinalpetase_old
 
-See:
+See `rbt/scripts/nll_cal.ipynb`
 
-rbt/PETase/scripts/nll_cal.ipynb
-
-The notebook recalculates the NLL/PPL values and compares them against the designed PETase
-distribution.
+The notebook recalculates the NLL/PPL values and compares them against the designed PETase distribution.
 
 ## MMseqs search: designed PETase vs. pinalpetase36 and pinalpetase_old
 
-Before running, make sure the MMSEQS path in rbt/PETase/search/mmseqs.sh points to a valid
-MMseqs binary.
+Before running, make sure the MMSEQS path in rbt/search/mmseqs.sh points to a valid MMseqs binary.
 
-bash rbt/PETase/search/mmseqs.sh
+`bash rbt/search/mmseqs.sh`
 
 # For 3.2 ADH/H-protein analysis
+
+> Before running these scripts, make sure you have an environment that can run [ProTrek](https://github.com/westlake-repl/ProTrek), or the [Pinal training](https://github.com/SuperCarryDFY/b097bade29ef6c984ea1c6f28ec5ece165c3765a459f16085d618a97f9a60286) environment that includes the ProTrek scoring code. Then replace the paths in rbt/scripts/cal_protrek_score.py (line9, line61-64) with your local ProTrek model and code paths.
+
+See `rbt/scripts/ppl_analysis.ipynb`

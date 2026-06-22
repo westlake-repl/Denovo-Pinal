@@ -24,7 +24,7 @@ if __name__ == "__main__":
 
     res = list(set(res)) # remove duplicates
     print("Number of unique sequences: ", len(res))
-    with open(os.path.join(args.res_dir, "sequence.fasta"), 'w') as f:
+    with open(os.path.join(args.res_dir, "all_seq_token.fasta"), 'w') as f:
         # f.write(''.join(res))
         for idx, seq in enumerate(res):
             f.write(f">Gather_idx_{idx}\n")
