@@ -1,4 +1,4 @@
-# PETase rebuttal analysis
+# For 3.1 PETases analysis
 
 Run all commands from the Denovo-Pinal repository root.
 
@@ -25,3 +25,5 @@ Before running, make sure the MMSEQS path in rbt/PETase/search/mmseqs.sh points 
 MMseqs binary.
 
 bash rbt/PETase/search/mmseqs.sh
+
+# For 3.2 ADH/H-protein analysis
