@@ -2,12 +2,10 @@ import os
 import argparse
 import torch
 from tqdm import tqdm
-
 import sys
 # replace the path with https://github.com/SuperCarryDFY/b097bade29ef6c984ea1c6f28ec5ece165c3765a459f16085d618a97f9a60286/pretrained_model/ProTrek/sequence_text_protrek_score.py
 sys.path.append("path_to_sequence_text_protrek_score")
 from model.claprot.claprot_trimodal_model import CLAProtTrimodalModel
-
 
 def read_fasta(file_path, max_seqs=1000000):
     sequences = {}
