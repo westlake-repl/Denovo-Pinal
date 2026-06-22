@@ -1,5 +1,7 @@
 *__pycache__*
 assets/bin
-rbt
-.vscode/settings.json
 weights
+outputs
+.vscode/settings.json
+rbt/search/wetlab_seqs_mmseqs_hit.tsv
+rbt

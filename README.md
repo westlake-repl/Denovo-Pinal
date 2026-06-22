@@ -54,8 +54,16 @@ Design protein from natural language instruction with only 3 lines of code!
 
 ```python
 from utils.design_utils import load_pinal, PinalDesign
-load_pinal()
-res = PinalDesign(desc="Actin.", num=10)
+t2struc, text_tokenizer, structre_tokenizer, saprot, saprot_text_tokenizer, saprot_tokenizer = load_pinal()
+res = PinalDesign(desc="Actin.", num=10, 
+    t2struc=t2struc,
+    text_tokenizer=text_tokenizer,
+    structre_tokenizer=structre_tokenizer,
+    saprot=saprot,
+    saprot_text_tokenizer=saprot_text_tokenizer,
+    saprot_tokenizer=saprot_tokenizer,
+    temperature=1.0,
+    saprot_sample_type="argmax")
 # res is a list of designed proteins, sorted by the probability per token. 
 ```
 

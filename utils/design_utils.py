@@ -7,6 +7,7 @@ from transformers import GenerationConfig
 import torch.nn as nn
 import logging
 from rich.logging import RichHandler
+from tqdm import tqdm
 import math
 from models import StructureTokenPredictionModel, SaProtIFModel
 
@@ -18,7 +19,7 @@ T2STRUCT = os.environ.get("DEFAULT_MODEL_T2STRUCT", "pytorch_model.bin")
 T2struc_NAME = os.environ.get("T2struc_NAME", "T2struc-1.2B")
 
 FORMAT = "%(message)s"
-logging.basicConfig(level="NOTSET", format=FORMAT, datefmt="[%X]", handlers=[RichHandler()])
+logging.basicConfig(level="INFO", format=FORMAT, datefmt="[%X]", handlers=[RichHandler()])
 logger = logging.getLogger("rich")
 
 TO_LIST = lambda seq: [
@@ -86,15 +87,16 @@ def load_SaProtT_and_tokenizers(SaProt_name="SaProt-T"):
 
 def load_pinal():
     logger.info("Loading Pinal...")
-    global t2struc, text_tokenizer, structre_tokenizer, saprot, saprot_text_tokenizer, saprot_tokenizer
+    # global t2struc, text_tokenizer, structre_tokenizer, saprot, saprot_text_tokenizer, saprot_tokenizer
     
     t2struc, text_tokenizer, structre_tokenizer = load_T2Struc_and_tokenizers()
     saprot, saprot_text_tokenizer, saprot_tokenizer = load_SaProtT_and_tokenizers()
     logger.info("Pinal loaded successfully.")
+    return t2struc, text_tokenizer, structre_tokenizer, saprot, saprot_text_tokenizer, saprot_tokenizer
 
-def T2StrcuDefaultGenerationConfig():
+def T2StrcuDefaultGenerationConfig(temperature):
     return GenerationConfig(
-        temperature=1,
+        temperature=temperature,
         top_k=40,
         top_p=1,
         do_sample=True,
@@ -199,36 +201,21 @@ def SaProtGeneration(saprot, SaProtInputDict, saprot_tokenizer, saprot_sample_ty
     }
 
 
-def deduplicate_tuples(tuple_list, keyid=0):
-    seen = set()
-    deduplicated_list = []
-    
-    for tpl in tuple_list:
-        key = (tpl[keyid])
-        if key not in seen:
-            seen.add(key)
-            deduplicated_list.append(tpl)
-    
-    return deduplicated_list
 
-def desc_sanity_check(desc):
-    if not desc.endswith("."):
-        logger.info("The description should end with a period.")
-        desc += "."
-    return desc
 
-def PinalDesign(desc, num):
+def PinalDesign(desc, num, t2struc, text_tokenizer, structre_tokenizer, saprot, saprot_text_tokenizer, saprot_tokenizer, temperature, saprot_sample_type, multinoimal_temperature):
     logger.info("Start designing...")
-    global t2struc, text_tokenizer, structre_tokenizer, saprot, saprot_text_tokenizer, saprot_tokenizer
+    # global t2struc, text_tokenizer, structre_tokenizer, saprot, saprot_text_tokenizer, saprot_tokenizer
     assert t2struc and text_tokenizer and structre_tokenizer and saprot and saprot_text_tokenizer and saprot_tokenizer, "Please call load_pinal() to load Pinal first."
 
-    desc = desc_sanity_check(desc)
     structures, structures_logp, sequences, sequences_logp = [], [], [], []
     
     # prepare input
     T2StrucGenerationDict = T2StrucPrepareGenerationInputs(t2struc, desc, text_tokenizer, structre_tokenizer)
-    T2StrucGenerationConfig = T2StrcuDefaultGenerationConfig()
-    for i in range(0, 100, math.ceil(500 / num)):
+    T2StrucGenerationConfig = T2StrcuDefaultGenerationConfig(temperature)
+    # for i in tqdm(range(0, 100, math.ceil(500 / num))):
+    for _ in tqdm(range(num//5), desc="Designing...", total=num//5):
+
         ## t2struc generation
         t2struc_res = T2StrucGeneration(t2struc, T2StrucGenerationDict, T2StrucGenerationConfig, structre_tokenizer)
         structures.extend(t2struc_res["structure"])
@@ -236,22 +223,25 @@ def PinalDesign(desc, num):
         
         ## SaProt-T
         SaProtInputDict = SaProtPrepareGenerationInputs(t2struc_res["structure"], desc, saprot_text_tokenizer, saprot_tokenizer)
-        saprot_res = SaProtGeneration(saprot, SaProtInputDict, saprot_tokenizer)        
+        # saprot_res = SaProtGeneration(saprot, SaProtInputDict, saprot_tokenizer)        
+        saprot_res = SaProtGeneration(saprot, SaProtInputDict, saprot_tokenizer, saprot_sample_type, multinoimal_temperature)
         sequences.extend(saprot_res["sequence"])
         sequences_logp.extend(saprot_res["sequence_logp"])
-        logger.info(f"{i + math.ceil(500 / num)} % Sequence Designed Done")
+        # logger.info(f"{i + math.ceil(500 / num)} % Sequence Designed Done")
+        # Clear GPU cache to prevent OOM
+        torch.cuda.empty_cache()
 
     ## rebatch
     res = list(zip(structures, structures_logp, sequences, sequences_logp))
-    res = deduplicate_tuples(res, keyid=2) # deduplicate by sequence
+    # res = deduplicate_tuples(res, keyid=2) # deduplicate by sequence
     res = sorted(res, key=lambda x: (x[1] + x[3]) / len(x[2]) , reverse=True)  # sort by normed logp
     # transfer the list of tuple to list of dict
-    res = [i[2] for i in res]
+    # res = [i[2] for i in res]
     
     return res
 
 def protrek_score(seq, pred_text, seq_type='prot'):
-    global protrek
+    # global protrek
     torch.cuda.empty_cache()
     if not isinstance(seq, list):
         seq = [seq]
