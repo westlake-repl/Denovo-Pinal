@@ -22,6 +22,8 @@ Before running, make sure the MMSEQS path in rbt/search/mmseqs.sh points to a va
 
 `bash rbt/search/mmseqs.sh`
 
+See `rbt/scripts/petase_selfsearch.ipynb` for the self-search and clustering analysis of a random PETase design sequence pool.
+
 # For 3.2 ADH/H-protein analysis
 
 > Before running these scripts, make sure you have an environment that can run [ProTrek](https://github.com/westlake-repl/ProTrek), or the [Pinal training](https://github.com/SuperCarryDFY/b097bade29ef6c984ea1c6f28ec5ece165c3765a459f16085d618a97f9a60286) environment that includes the ProTrek scoring code. Then replace the paths in rbt/scripts/cal_protrek_score.py (line7, line58-61) with your local ProTrek model and code paths. Also make sure you have an environment with ESMFold and its dependencies installed.
