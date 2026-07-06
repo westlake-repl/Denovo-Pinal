@@ -1,0 +1,2 @@
+Seed: 42
+Args: Namespace(desc_path='rbt/PETase/petase.txt', multinoimal_temperature=0.3, num=50000, output_dir='/storage/yuanfajieLab/yuanfajie/fengyuan/Denovo-Pinal/rbt/PETase/outputs', saprot_sample_type='multinomial', seed=42, temperature=1.0)

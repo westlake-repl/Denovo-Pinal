@@ -3,4 +3,10 @@ assets/bin
 weights
 outputs
 .vscode/settings.json
-rbt/search/wetlab_seqs_mmseqs_hit.tsv
+# rbt/search/wetlab_seqs_mmseqs_hit.tsv
+!rbt/outputs/
+!rbt/outputs/petase
+!rbt/outputs/petase/**
+
+rbt/outputs/petase/sequence_esmfold_results
+rbt/outputs/petase_old/

@@ -9,6 +9,7 @@ bash rbt/scripts/petase.sh
 ```
 
 This script generates PETase designs and gathers the outputs into all_seq_token.fasta.
+The pre-generated PETase design results are also provided in `rbt/outputs/petase`.
 
 ## Recalculate NLL for pinalpetase36 and pinalpetase_old
 
