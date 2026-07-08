@@ -8,16 +8,16 @@ Run all commands from the Denovo-Pinal repository root. Before running the desig
 bash rbt/scripts/petase.sh
 ```
 
-This script generates PETase designs and gathers the outputs into all_seq_token.fasta.
+This script generates PETase designs and gathers the outputs into sequence.fasta.
 The pre-generated PETase design results are also provided in `rbt/outputs/petase`.
 
-## Recalculate NLL for pinalpetase36 and pinalpetase_old
+## Recalculate NLL for pinalpetase36 and pinalPETase01 (the original variant)
 
 See `rbt/scripts/nll_cal.ipynb`
 
 The notebook recalculates the NLL/PPL values and compares them against the designed PETase distribution.
 
-## MMseqs search: designed PETase vs. pinalpetase36 and pinalpetase_old
+## MMseqs search: designed PETase vs. pinalpetase36 and pinalPETase01 (the original variant)
 
 Before running, make sure the MMSEQS path in rbt/search/mmseqs.sh points to a valid MMseqs binary.
 
@@ -46,8 +46,8 @@ python rbt/scripts/cal_protrek_score.py rbt/outputs/h_protein
 Run ESMFold:
 
 ```bash
-bash rbt/scripts/run_esmfold.sh rbt/outputs/adh/all_seq_token.fasta
-bash rbt/scripts/run_esmfold.sh rbt/outputs/h_protein/all_seq_token.fasta
+bash rbt/scripts/run_esmfold.sh rbt/outputs/adh/sequence.fasta
+bash rbt/scripts/run_esmfold.sh rbt/outputs/h_protein/sequence.fasta
 ```
 
 See `rbt/scripts/ppl_analysis.ipynb` for the analysis of ProTrek score, ESMFold pLDDT, and PPL.

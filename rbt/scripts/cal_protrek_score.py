@@ -69,7 +69,7 @@ def load_CLIP():
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('res_dir')
-    parser.add_argument('--seq_file_name', default="all_seq_token.fasta")
+    parser.add_argument('--seq_file_name', default="sequence.fasta")
     args = parser.parse_args()
 
     sequences = []
