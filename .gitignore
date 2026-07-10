@@ -11,3 +11,4 @@ outputs
 rbt/outputs/petase/sequence_esmfold_results
 rbt/outputs/petase_old/
 rbt/search/wetlab_seqs_mmseqs_hit.tsv.old*
+*sequence_esmfold_results
