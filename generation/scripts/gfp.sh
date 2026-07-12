@@ -6,7 +6,7 @@ accelerate launch generation/scripts/design.py\
     --temperature 1\
     --num 50000\
     --saprot_sample_type multinomial\
-    --multinoimal_temperature 0.1 \
+    --multinomial_temperature 0.1 \
     --output_dir generation/outputs
 
 python generation/scripts/gather_distribution_results.py generation/outputs/gfp

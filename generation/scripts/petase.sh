@@ -6,7 +6,7 @@ accelerate launch generation/scripts/design.py\
     --temperature 1.2\
     --num 200000\
     --saprot_sample_type multinomial\
-    --multinoimal_temperature 0.3 \
+    --multinomial_temperature 0.3 \
     --output_dir generation/outputs
 
 python generation/scripts/gather_distribution_results.py generation/outputs/petase

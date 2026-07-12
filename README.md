@@ -54,11 +54,11 @@ Design protein from natural language instruction with only 3 lines of code!
 
 ```python
 from utils.design_utils import load_pinal, PinalDesign
-t2struc, text_tokenizer, structre_tokenizer, saprot, saprot_text_tokenizer, saprot_tokenizer = load_pinal()
+t2struc, text_tokenizer, structure_tokenizer, saprot, saprot_text_tokenizer, saprot_tokenizer = load_pinal()
 res = PinalDesign(desc="Actin.", num=10, 
     t2struc=t2struc,
     text_tokenizer=text_tokenizer,
-    structre_tokenizer=structre_tokenizer,
+    structure_tokenizer=structure_tokenizer,
     saprot=saprot,
     saprot_text_tokenizer=saprot_text_tokenizer,
     saprot_tokenizer=saprot_tokenizer,

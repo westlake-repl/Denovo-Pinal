@@ -73,8 +73,8 @@ def load_T2Struc_and_tokenizers():
     cfg = OmegaConf.load(os.path.join(MODEL_ROOT, T2struc_NAME, "config.yaml"))
     model = load_T2Struc(cfg, T2struc_NAME)
     model = model.eval()
-    text_tokenizer, structre_tokenizer = load_T2Struc_tokenizers(cfg)
-    return model, text_tokenizer, structre_tokenizer
+    text_tokenizer, structure_tokenizer = load_T2Struc_tokenizers(cfg)
+    return model, text_tokenizer, structure_tokenizer
 
 def load_SaProtT_and_tokenizers(SaProt_name="SaProt-T"):
     assert SaProt_name in SAPROT_NAMES
@@ -87,12 +87,12 @@ def load_SaProtT_and_tokenizers(SaProt_name="SaProt-T"):
 
 def load_pinal():
     logger.info("Loading Pinal...")
-    # global t2struc, text_tokenizer, structre_tokenizer, saprot, saprot_text_tokenizer, saprot_tokenizer
+    # global t2struc, text_tokenizer, structure_tokenizer, saprot, saprot_text_tokenizer, saprot_tokenizer
     
-    t2struc, text_tokenizer, structre_tokenizer = load_T2Struc_and_tokenizers()
+    t2struc, text_tokenizer, structure_tokenizer = load_T2Struc_and_tokenizers()
     saprot, saprot_text_tokenizer, saprot_tokenizer = load_SaProtT_and_tokenizers()
     logger.info("Pinal loaded successfully.")
-    return t2struc, text_tokenizer, structre_tokenizer, saprot, saprot_text_tokenizer, saprot_tokenizer
+    return t2struc, text_tokenizer, structure_tokenizer, saprot, saprot_text_tokenizer, saprot_tokenizer
 
 def T2StrcuDefaultGenerationConfig(temperature):
     return GenerationConfig(
@@ -106,7 +106,7 @@ def T2StrcuDefaultGenerationConfig(temperature):
         min_length=64,
     )
 
-def T2StrucPrepareGenerationInputs(t2struc, desc, text_tokenizer, structre_tokenizer):
+def T2StrucPrepareGenerationInputs(t2struc, desc, text_tokenizer, structure_tokenizer):
     batch = {}
     desc_encodings = text_tokenizer(
         desc,
@@ -119,9 +119,9 @@ def T2StrucPrepareGenerationInputs(t2struc, desc, text_tokenizer, structre_token
     batch["text_masks"] = desc_encodings.attention_mask.to(DEVICE)
     text_hidden_states, text_attention_mask = t2struc.infer_text(batch)
     
-    start_id = structre_tokenizer.cls_token_id
-    stop_id = structre_tokenizer.eos_token_id
-    pad_id = structre_tokenizer.pad_token_id
+    start_id = structure_tokenizer.cls_token_id
+    stop_id = structure_tokenizer.eos_token_id
+    pad_id = structure_tokenizer.pad_token_id
     input_ids = (torch.zeros((1)) + start_id).unsqueeze(0).to(torch.long).to(DEVICE) # create batch dim
     
     return {
@@ -133,7 +133,7 @@ def T2StrucPrepareGenerationInputs(t2struc, desc, text_tokenizer, structre_token
         "encoder_attention_mask": text_attention_mask,
     }
     
-def T2StrucGeneration(t2struc, T2StrucGenerationDict, T2StrucGenerationConfig, structre_tokenizer):
+def T2StrucGeneration(t2struc, T2StrucGenerationDict, T2StrucGenerationConfig, structure_tokenizer):
     sample_results = t2struc.plm.generate(
         do_sample=True,
         generation_config=T2StrucGenerationConfig,
@@ -142,14 +142,14 @@ def T2StrucGeneration(t2struc, T2StrucGenerationDict, T2StrucGenerationConfig, s
         **T2StrucGenerationDict
     )
     return {
-        "structure": structre_tokenizer.batch_decode(TO_LIST(sample_results.sequences)),
-        "structrue_logp": torch.sum(sample_results.log_p, dim=-1).cpu().numpy().tolist(),
+        "structure": structure_tokenizer.batch_decode(TO_LIST(sample_results.sequences)),
+        "structure_logp": torch.sum(sample_results.log_p, dim=-1).cpu().numpy().tolist(),
     }
 
 def SaProtPrepareGenerationInputs(structures, desc, saprot_text_tokenizer, saprot_tokenizer):
     saprot_input = []
-    for structrue in structures:
-        saprot_input.append("#" + "#".join([i for i in structrue.split() if i.isalpha() or i == "#"]))
+    for structure in structures:
+        saprot_input.append("#" + "#".join([i for i in structure.split() if i.isalpha() or i == "#"]))
     inputs = saprot_tokenizer(saprot_input, return_tensors="pt", max_length=1024, truncation=True, padding="max_length")
     inputs = {k: v.to(DEVICE) for k, v in inputs.items()}
     encodings = saprot_text_tokenizer(
@@ -203,28 +203,28 @@ def SaProtGeneration(saprot, SaProtInputDict, saprot_tokenizer, saprot_sample_ty
 
 
 
-def PinalDesign(desc, num, t2struc, text_tokenizer, structre_tokenizer, saprot, saprot_text_tokenizer, saprot_tokenizer, temperature, saprot_sample_type, multinoimal_temperature):
+def PinalDesign(desc, num, t2struc, text_tokenizer, structure_tokenizer, saprot, saprot_text_tokenizer, saprot_tokenizer, temperature, saprot_sample_type, multinomial_temperature=0.1):
     logger.info("Start designing...")
-    # global t2struc, text_tokenizer, structre_tokenizer, saprot, saprot_text_tokenizer, saprot_tokenizer
-    assert t2struc and text_tokenizer and structre_tokenizer and saprot and saprot_text_tokenizer and saprot_tokenizer, "Please call load_pinal() to load Pinal first."
+    # global t2struc, text_tokenizer, structure_tokenizer, saprot, saprot_text_tokenizer, saprot_tokenizer
+    assert t2struc and text_tokenizer and structure_tokenizer and saprot and saprot_text_tokenizer and saprot_tokenizer, "Please call load_pinal() to load Pinal first."
 
     structures, structures_logp, sequences, sequences_logp = [], [], [], []
     
     # prepare input
-    T2StrucGenerationDict = T2StrucPrepareGenerationInputs(t2struc, desc, text_tokenizer, structre_tokenizer)
+    T2StrucGenerationDict = T2StrucPrepareGenerationInputs(t2struc, desc, text_tokenizer, structure_tokenizer)
     T2StrucGenerationConfig = T2StrcuDefaultGenerationConfig(temperature)
     # for i in tqdm(range(0, 100, math.ceil(500 / num))):
     for _ in tqdm(range(num//5), desc="Designing...", total=num//5):
 
         ## t2struc generation
-        t2struc_res = T2StrucGeneration(t2struc, T2StrucGenerationDict, T2StrucGenerationConfig, structre_tokenizer)
+        t2struc_res = T2StrucGeneration(t2struc, T2StrucGenerationDict, T2StrucGenerationConfig, structure_tokenizer)
         structures.extend(t2struc_res["structure"])
-        structures_logp.extend(t2struc_res["structrue_logp"])
+        structures_logp.extend(t2struc_res["structure_logp"])
         
         ## SaProt-T
         SaProtInputDict = SaProtPrepareGenerationInputs(t2struc_res["structure"], desc, saprot_text_tokenizer, saprot_tokenizer)
         # saprot_res = SaProtGeneration(saprot, SaProtInputDict, saprot_tokenizer)        
-        saprot_res = SaProtGeneration(saprot, SaProtInputDict, saprot_tokenizer, saprot_sample_type, multinoimal_temperature)
+        saprot_res = SaProtGeneration(saprot, SaProtInputDict, saprot_tokenizer, saprot_sample_type, multinomial_temperature)
         sequences.extend(saprot_res["sequence"])
         sequences_logp.extend(saprot_res["sequence_logp"])
         # logger.info(f"{i + math.ceil(500 / num)} % Sequence Designed Done")
@@ -239,41 +239,3 @@ def PinalDesign(desc, num, t2struc, text_tokenizer, structre_tokenizer, saprot, 
     # res = [i[2] for i in res]
     
     return res
-
-def protrek_score(seq, pred_text, seq_type='prot'):
-    # global protrek
-    torch.cuda.empty_cache()
-    if not isinstance(seq, list):
-        seq = [seq]
-    if not isinstance(pred_text, list):
-        pred_text = [pred_text]
-
-    with torch.no_grad():
-        if seq_type == 'prot':
-            seq_repr = protrek.get_protein_repr(seq)
-        else:
-            seq_repr = protrek.get_structure_repr(seq)
-        pred_text_repr = protrek.get_text_repr(pred_text)
-
-        sim_pred_text = torch.matmul(pred_text_repr, seq_repr.T) / protrek.temperature
-
-        sim_pred_mask = torch.eye(sim_pred_text.size(0), device=sim_pred_text.device)
-        sim_pred_text = sim_pred_text.masked_fill(sim_pred_mask == 0, -1e9)
-        sim_pred_text = sim_pred_text.max(dim=1)[0]
-    return sim_pred_text
-
-def load_protrek():
-    import sys
-    sys.path.append("/daifengyuan/my_project/analysis/clip_score")
-    from model.claprot.claprot_trimodal_model import CLAProtTrimodalModel
-    global protrek
-    # loading model
-    model_config = {
-        "protein_config": "/daifengyuan/ProteinQA/Models/esm2_t12_35M_UR50D",
-        "text_config": "/daifengyuan/ProteinQA/Models/BiomedNLP-PubMedBERT-base-uncased-abstract-fulltext",
-        "structure_config": "/daifengyuan/ProteinQA/Models/foldseek_t12_35M",
-        "from_checkpoint": "/daifengyuan/ProteinQA/Models/CLAProt_35M_uniref50_high_sim.pt"
-    }
-    protrek = CLAProtTrimodalModel(**model_config)
-    protrek.to("cuda").eval()
-    logger.info("Protrek loaded successfully.")
