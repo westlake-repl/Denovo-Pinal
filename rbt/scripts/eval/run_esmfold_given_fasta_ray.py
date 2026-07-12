@@ -45,14 +45,10 @@ class ESMFoldPredictor:
         logger.info("Model loaded successfully.")
 
     def process_batch(self, batch_data, output_path):
-        """
-        处理一个小批次的数据
-        batch_data: list of (entry_id, sequence)
-        """
         batch_metrics_dic = defaultdict(dict)
 
         for entry_id, sequence in batch_data:
-            sequence = sequence[:1024]  # 截断
+            sequence = sequence[:1024] 
             output_file = f"sequence_{entry_id}.pdb"
             file_full_path = os.path.join(output_path, output_file)
 
@@ -88,15 +84,13 @@ def read_fasta(file_path, max_seqs=1000000):
             line = line.strip()
             if line.startswith(">"):
                 if current_header is not None:
-                    # 保存上一个序列
                     sequences[current_header] = "".join(current_sequence)
                     current_sequence = []
-                current_header = line[1:]  # 去掉'>'符号
+                current_header = line[1:] 
             else:
                 current_sequence.append(line)
             if len(sequences) > max_seqs:
                 break
-        # 保存最后一个序列
         if current_header is not None:
             sequences[current_header] = "".join(current_sequence)
 

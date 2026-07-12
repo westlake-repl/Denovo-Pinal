@@ -1,6 +1,5 @@
 
-MMSEQS=[place-your-own-mmseqs-path]
-# MMSEQS=[your_mmseqs_path]
+MMSEQS=[your_mmseqs_path]
 input_path=rbt/search/wetlab_seqs.fasta
 
 designed_seqs=rbt/outputs/petase/sequence.fasta

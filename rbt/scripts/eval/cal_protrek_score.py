@@ -17,15 +17,13 @@ def read_fasta(file_path, max_seqs=1000000):
             line = line.strip()
             if line.startswith(">"):
                 if current_header is not None:
-                    # 保存上一个序列
                     sequences[current_header] = "".join(current_sequence)
                     current_sequence = []
-                current_header = line[1:]  # 去掉'>'符号
+                current_header = line[1:]
             else:
                 current_sequence.append(line)
             if len(sequences) > max_seqs:
                 break
-        # 保存最后一个序列
         if current_header is not None:
             sequences[current_header] = "".join(current_sequence)
 
