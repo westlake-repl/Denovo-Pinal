@@ -137,7 +137,7 @@ def T2StrucGeneration(t2struc, T2StrucGenerationDict, T2StrucGenerationConfig, s
     sample_results = t2struc.plm.generate(
         do_sample=True,
         generation_config=T2StrucGenerationConfig,
-        num_return_sequences=5,
+        num_return_sequences=1,
         return_dict_in_generate=True, 
         **T2StrucGenerationDict
     )
@@ -213,8 +213,7 @@ def PinalDesign(desc, num, t2struc, text_tokenizer, structure_tokenizer, saprot,
     # prepare input
     T2StrucGenerationDict = T2StrucPrepareGenerationInputs(t2struc, desc, text_tokenizer, structure_tokenizer)
     T2StrucGenerationConfig = T2StrcuDefaultGenerationConfig(temperature)
-    # for i in tqdm(range(0, 100, math.ceil(500 / num))):
-    for _ in tqdm(range(num//5), desc="Designing...", total=num//5):
+    for _ in tqdm(range(num), desc="Designing...", total=num):
 
         ## t2struc generation
         t2struc_res = T2StrucGeneration(t2struc, T2StrucGenerationDict, T2StrucGenerationConfig, structure_tokenizer)
@@ -223,19 +222,12 @@ def PinalDesign(desc, num, t2struc, text_tokenizer, structure_tokenizer, saprot,
         
         ## SaProt-T
         SaProtInputDict = SaProtPrepareGenerationInputs(t2struc_res["structure"], desc, saprot_text_tokenizer, saprot_tokenizer)
-        # saprot_res = SaProtGeneration(saprot, SaProtInputDict, saprot_tokenizer)        
         saprot_res = SaProtGeneration(saprot, SaProtInputDict, saprot_tokenizer, saprot_sample_type, multinomial_temperature)
         sequences.extend(saprot_res["sequence"])
         sequences_logp.extend(saprot_res["sequence_logp"])
-        # logger.info(f"{i + math.ceil(500 / num)} % Sequence Designed Done")
-        # Clear GPU cache to prevent OOM
         torch.cuda.empty_cache()
 
-    ## rebatch
     res = list(zip(structures, structures_logp, sequences, sequences_logp))
-    # res = deduplicate_tuples(res, keyid=2) # deduplicate by sequence
     res = sorted(res, key=lambda x: (x[1] + x[3]) / len(x[2]) , reverse=True)  # sort by normed logp
-    # transfer the list of tuple to list of dict
-    # res = [i[2] for i in res]
     
     return res
