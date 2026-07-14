@@ -1,1 +1,5 @@
 Please design a protein that is an alcohol dehydrogenase.
+alcohol dehydrogenase.
+This protein is an alcohol dehydrogenase.
+Generate alcohol dehydrogenases for me.
+This is an alcohol dehydrogenase.
