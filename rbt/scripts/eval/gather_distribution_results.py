@@ -22,8 +22,6 @@ if __name__ == "__main__":
     for f in _res_files:
         os.rename(os.path.join(args.res_dir, f), os.path.join(args.res_dir, 'rank_files', f))
 
-    res = list(set(res)) # remove duplicates
-    print("Number of unique sequences: ", len(res))
     with open(os.path.join(args.res_dir, "sequence.fasta"), 'w') as f:
         # f.write(''.join(res))
         for idx, seq in enumerate(res):
