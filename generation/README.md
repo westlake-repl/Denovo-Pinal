@@ -16,15 +16,15 @@ bash generation/scripts/h_protein.sh
 bash generation/scripts/gfp.sh
 ```
 
-Each script runs Pinal with the generation hyperparameters used for that target and writes results to generation/outputs/<target>/.
+Each script runs Pinal with the generation hyperparameters used for that target and writes results to `generation/outputs/<target>/`.
 
 The final gathered FASTA file is:
 
-generation/outputs/<target>/all_seq_token.fasta
+`generation/outputs/<target>/all_seq_token.fasta`
 
 The per-rank raw outputs are moved to:
 
-generation/outputs/<target>/rank_files/
+`generation/outputs/<target>/rank_files/`
 
 ## Targets
 
