@@ -24,12 +24,12 @@ if __name__ == "__main__":
     parser.add_argument("--num", type=int, default=10)
     parser.add_argument("--temperature", type=float, default=1.)
     parser.add_argument("--saprot_sample_type", choices=["argmax", "multinomial"], default="argmax")
-    parser.add_argument("--multinoimal_temperature", type=float, default=0.3)
+    parser.add_argument("--multinomial_temperature", type=float, default=0.3)
     parser.add_argument("--output_dir", type=str, required=True)
     parser.add_argument("--seed", type=int, default=42)
     args = parser.parse_args()
     assert args.saprot_sample_type == "multinomial", "saprot sample type is multinomial only."
-    assert not (args.saprot_sample_type == "argmax" and args.multinoimal_temperature != 0.3) , "If you choose argmax, the specific multinoimal_temperature would be of no use."
+    assert not (args.saprot_sample_type == "argmax" and args.multinomial_temperature != 0.3) , "If you choose argmax, the specific multinomial_temperature would be of no use."
 
     timeout_kwargs = InitProcessGroupKwargs(timeout=timedelta(hours=4))
     accelerator = Accelerator(kwargs_handlers=[timeout_kwargs])
@@ -64,7 +64,7 @@ if __name__ == "__main__":
     
     print(f"Rank: {rank}, Design number: {design_num}")
     res = PinalDesign(desc, design_num, t2struc, text_tokenizer, structre_tokenizer, saprot, \
-                      saprot_text_tokenizer, saprot_tokenizer, args.temperature, args.saprot_sample_type, args.multinoimal_temperature)
+                      saprot_text_tokenizer, saprot_tokenizer, args.temperature, args.saprot_sample_type, args.multinomial_temperature)
     if not os.path.exists(output_dir):
         os.makedirs(output_dir, exist_ok=True)
     

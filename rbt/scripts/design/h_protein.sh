@@ -6,7 +6,7 @@ accelerate launch rbt/scripts/design.py\
     --temperature 1\
     --num 50000\
     --saprot_sample_type multinomial\
-    --multinoimal_temperature 0.3 \
+    --multinomial_temperature 0.3 \
     --output_dir rbt/outputs
 
 python rbt/scripts/eval/gather_distribution_results.py rbt/outputs/h_protein
