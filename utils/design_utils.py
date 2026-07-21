@@ -203,7 +203,7 @@ def SaProtGeneration(saprot, SaProtInputDict, saprot_tokenizer, saprot_sample_ty
 
 
 
-def PinalDesign(desc, num, t2struc, text_tokenizer, structre_tokenizer, saprot, saprot_text_tokenizer, saprot_tokenizer, temperature, saprot_sample_type, multinoimal_temperature):
+def PinalDesign(desc, num, t2struc, text_tokenizer, structre_tokenizer, saprot, saprot_text_tokenizer, saprot_tokenizer, temperature, saprot_sample_type, multinomial_temperature):
     logger.info("Start designing...")
     # global t2struc, text_tokenizer, structre_tokenizer, saprot, saprot_text_tokenizer, saprot_tokenizer
     assert t2struc and text_tokenizer and structre_tokenizer and saprot and saprot_text_tokenizer and saprot_tokenizer, "Please call load_pinal() to load Pinal first."
@@ -224,7 +224,7 @@ def PinalDesign(desc, num, t2struc, text_tokenizer, structre_tokenizer, saprot, 
         ## SaProt-T
         SaProtInputDict = SaProtPrepareGenerationInputs(t2struc_res["structure"], desc, saprot_text_tokenizer, saprot_tokenizer)
         # saprot_res = SaProtGeneration(saprot, SaProtInputDict, saprot_tokenizer)        
-        saprot_res = SaProtGeneration(saprot, SaProtInputDict, saprot_tokenizer, saprot_sample_type, multinoimal_temperature)
+        saprot_res = SaProtGeneration(saprot, SaProtInputDict, saprot_tokenizer, saprot_sample_type, multinomial_temperature)
         sequences.extend(saprot_res["sequence"])
         sequences_logp.extend(saprot_res["sequence_logp"])
         # logger.info(f"{i + math.ceil(500 / num)} % Sequence Designed Done")
