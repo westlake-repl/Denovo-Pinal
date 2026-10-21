@@ -1,4 +1,4 @@
-## Pinal: Toward De Novo Protein Design from Natural Language
+## Pinal: Programmable design of functional proteins from natural language
 
 <a href="https://www.biorxiv.org/content/10.1101/2024.08.01.606258"><img src="https://img.shields.io/badge/Paper-bioRxiv-green" style="max-width: 100%;"></a>
 <a href="http://www.denovo-pinal.com/"><img src="https://img.shields.io/badge/Pinal-red?label=Server" style="max-width: 100%;"></a>
