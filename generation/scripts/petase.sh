@@ -1,5 +1,5 @@
 export PINAL_MODEL_ROOT=[your_pinal_model_root]
-export T2struc_NAME=T2struc-15B
+export T2struct_NAME=T2struct-15.5B
 
 accelerate launch generation/scripts/design.py\
     --desc_path generation/petase.txt\

@@ -27,25 +27,25 @@ pip install -r requirements.txt
 
 ### Download model weights
 
-We provide a script to download the pre-trained model weights, as shown below. Please download all files and put them in the `weights` directory, e.g., `weights/Pinal/...`
+We provide a script to download the pre-trained model weights, as shown below. Please download all files and put them in the `weights/Pinal` directory, e.g., `weights/Pinal/T2struct-1.2B/...`
 
 
 ```shell
 huggingface-cli download westlake-repl/Pinal \
                          --repo-type model \
-                         --local-dir weights/
+                         --local-dir weights/Pinal
 ```
 
 #### Model checkpoints
 
-The `weights` directory contains 4 models:
+The `weights/Pinal` directory contains 4 models:
 
 |**Name** |**Size** |
 |---------|---------|
 |[SaProt-T](https://huggingface.co/westlake-repl/Pinal/tree/main/SaProt-T) | 760M |
 |[SaProt-O](https://huggingface.co/westlake-repl/Pinal/tree/main/SaProt-O) | 760M |
-|[T2struc-1.2B](https://huggingface.co/westlake-repl/Pinal/tree/main/T2struc-1.2B) | 1.2B |
-|[T2struc-15B](https://huggingface.co/westlake-repl/Pinal/tree/main/T2struc-15B) | 15.5B |
+|[T2struct-1.2B](https://huggingface.co/westlake-repl/Pinal/tree/main/T2struct-1.2B) | 1.2B |
+|[T2struct-15.5B](https://huggingface.co/westlake-repl/Pinal/tree/main/T2struct-15.5B) | 15.5B |
 
 
 ### Inference with Pinal
@@ -54,9 +54,9 @@ Design protein from natural language instruction with only 3 lines of code!
 
 ```python
 from utils.design_utils import load_pinal, PinalDesign
-t2struc, text_tokenizer, structure_tokenizer, saprot, saprot_text_tokenizer, saprot_tokenizer = load_pinal()
+t2struct, text_tokenizer, structure_tokenizer, saprot, saprot_text_tokenizer, saprot_tokenizer = load_pinal()
 res = PinalDesign(desc="Actin.", num=10, 
-    t2struc=t2struc,
+    t2struct=t2struct,
     text_tokenizer=text_tokenizer,
     structure_tokenizer=structure_tokenizer,
     saprot=saprot,
@@ -69,13 +69,16 @@ res = PinalDesign(desc="Actin.", num=10,
 # res is a list of designed proteins, sorted by the probability per token. 
 ```
 
-The above code will generate 10 de novo designed proteins based on the input description "Actin.", inferred by 1.2B T2struc and SaProt-T. If you want inference with T2struc-15B, you can set the environment variable `T2struc_NAME` before calling `load_pinal()`, as shown below.
+The above code will generate 10 designed proteins based on the input description "Actin.", inferred by T2struct-1.2B and SaProt-T. If you want inference with T2struct-15.5B, set the environment variable `T2struct_NAME` before importing `utils.design_utils` in a fresh Python process, as shown below.
 
 ```python
 import os
-os.environ["T2struc_NAME"] = "T2struc-15B"
+os.environ["T2struct_NAME"] = "T2struct-15.5B"
+
+from utils.design_utils import load_pinal, PinalDesign
+t2struct, text_tokenizer, structure_tokenizer, saprot, saprot_text_tokenizer, saprot_tokenizer = load_pinal()
 ```
-> Warning: Inferencing with T2struc-15B requires at least 40GB GPU memory. On a single NVIDIA A40 GPU, designing 10 proteins takes approximately 1 minute. 
+> Warning: Inferencing with T2struct-15.5B requires at least 40GB GPU memory. On a single NVIDIA A40 GPU, designing 10 proteins takes approximately 1 minute.
 
 ### Predicting amino acid sequence with SaProt-T
 

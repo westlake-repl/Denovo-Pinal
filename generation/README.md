@@ -5,7 +5,7 @@ to design ADH, PETase, H protein, and GFP sequences.
 
 Run all commands from the Denovo-Pinal repository root.
 
-Before running the scripts, replace `[your_pinal_model_root]` in `generation/scripts/*.sh` with your local Pinal model directory, for example `weights/Pinal`. The directory should contain `T2struc-15B/` and `SaProt-T/`.
+Before running the scripts, replace `[your_pinal_model_root]` in `generation/scripts/*.sh` with your local Pinal model directory, for example `weights/Pinal`. The directory should contain `T2struct-15.5B/` and `SaProt-T/`.
 
 ## Generate Sequences
 
