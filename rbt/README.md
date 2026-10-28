@@ -1,6 +1,6 @@
 # Analysis for Question 3.1: PETase
 
-Run all shell commands from the root directory of the Denovo-Pinal repository. The notebooks in `rbt/scripts/analysis` should be run from their own directory. Before running the design scripts, replace `[your_pinal_model_root]` in `rbt/scripts/design/*.sh` with your local Pinal model directory, for example `weights/Pinal`. This directory should contain `T2struc-15B/` and `SaProt-T/`.
+Run all shell commands from the root directory of the Denovo-Pinal repository. The notebooks in `rbt/scripts/analysis` should be run from their own directory. Before running the design scripts, replace `[your_pinal_model_root]` in `rbt/scripts/design/*.sh` with your local Pinal model directory, for example `weights/Pinal`. This directory should contain `T2struct-15.5B/` and `SaProt-T/`.
 
 ## Generate PETase sequence pool
 

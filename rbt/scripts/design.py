@@ -51,7 +51,7 @@ if __name__ == "__main__":
         handler.addFilter(RankFilter())
         handler.setFormatter(logging.Formatter("[rank %(rank)s] %(message)s"))
 
-    t2struc, text_tokenizer, structre_tokenizer, saprot, saprot_text_tokenizer, saprot_tokenizer = load_pinal()
+    t2struct, text_tokenizer, structure_tokenizer, saprot, saprot_text_tokenizer, saprot_tokenizer = load_pinal()
     if dist.is_initialized():
 
         # design_num = args.num // (accelerator.num_processes*5 ) 
@@ -63,7 +63,7 @@ if __name__ == "__main__":
         rank = 0
     
     print(f"Rank: {rank}, Design number: {design_num}")
-    res = PinalDesign(desc, design_num, t2struc, text_tokenizer, structre_tokenizer, saprot, \
+    res = PinalDesign(desc, design_num, t2struct, text_tokenizer, structure_tokenizer, saprot, \
                       saprot_text_tokenizer, saprot_tokenizer, args.temperature, args.saprot_sample_type, args.multinomial_temperature)
     if not os.path.exists(output_dir):
         os.makedirs(output_dir, exist_ok=True)
