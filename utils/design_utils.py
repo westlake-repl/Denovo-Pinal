@@ -12,7 +12,7 @@ import math
 from models import StructureTokenPredictionModel, SaProtIFModel
 
 T2struct_NAMES=["T2struct-1.2B", "T2struct-15.5B"]
-SAPROT_NAMES=["SaProt-T"]
+SAPROT_NAMES=["SaProt-T", "SaProt-O"]
 MODEL_ROOT = os.environ.get("PINAL_MODEL_ROOT", "weights/Pinal")
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 T2STRUCT = os.environ.get("DEFAULT_MODEL_T2STRUCT", "pytorch_model.bin")
@@ -85,6 +85,15 @@ def load_SaProtT_and_tokenizers(SaProt_name="SaProt-T"):
     return model, text_tokenizer, SaProt_tokenizer
 
 
+def load_SaProtO_and_tokenizers(SaProt_name="SaProt-O"):
+    assert SaProt_name in SAPROT_NAMES
+    cfg = OmegaConf.load(os.path.join(MODEL_ROOT, SaProt_name, "config.yaml"))
+    model = load_SaProtT(cfg, SaProt_name)
+    model = model.eval()
+    SaProt_tokenizer, text_tokenizer = load_SaProt_tokenizers(cfg)
+    return model, text_tokenizer, SaProt_tokenizer
+
+
 def load_pinal():
     logger.info("Loading Pinal...")
     # global t2struct, text_tokenizer, structure_tokenizer, saprot, saprot_text_tokenizer, saprot_tokenizer
@@ -146,10 +155,20 @@ def T2StructGeneration(t2struct, T2StructGenerationDict, T2StructGenerationConfi
         "structure_logp": torch.sum(sample_results.log_p, dim=-1).cpu().numpy().tolist(),
     }
 
-def SaProtPrepareGenerationInputs(structures, desc, saprot_text_tokenizer, saprot_tokenizer):
+def SaProtPrepareGenerationInputs(structures, desc, saprot_text_tokenizer, saprot_tokenizer, sequences=None):
     saprot_input = []
-    for structure in structures:
-        saprot_input.append("#" + "#".join([i for i in structure.split() if i.isalpha() or i == "#"]))
+    if sequences is not None:
+        if len(sequences) != len(structures):
+            raise ValueError("The length of sequences and structures should be the same.")
+        for sequence, structure in zip(sequences, structures):
+            sequence = sequence.split()
+            structure = structure.split()
+            if len(sequence) != len(structure):
+                raise ValueError("The length of sequence and structure should be the same.")
+            saprot_input.append("".join(f"{aa.upper() if aa.isalpha() else '#'}{token.lower() if token.isalpha() else '#'}" for aa, token in zip(sequence, structure)))
+    else:
+        for structure in structures:
+            saprot_input.append("#" + "#".join([i for i in structure.split() if i.isalpha() or i == "#"]))
     inputs = saprot_tokenizer(saprot_input, return_tensors="pt", max_length=1024, truncation=True, padding="max_length")
     inputs = {k: v.to(DEVICE) for k, v in inputs.items()}
     encodings = saprot_text_tokenizer(
@@ -166,7 +185,8 @@ def SaProtPrepareGenerationInputs(structures, desc, saprot_text_tokenizer, sapro
             "prot_masks": inputs["attention_mask"],
             'text_ids': saprot_text_ids,
             'text_masks': saprot_text_masks, 
-            "prot_ids": None
+            "prot_ids": None,
+            "sequences": sequences
         }
 
 def SaProtGeneration(saprot, SaProtInputDict, saprot_tokenizer, saprot_sample_type="argmax", multinomial_temperature=0.1):
@@ -192,6 +212,15 @@ def SaProtGeneration(saprot, SaProtInputDict, saprot_tokenizer, saprot_sample_ty
                 break
             cur_list.append(i[0])
         sequence_token_list.append(cur_list)
+
+    if SaProtInputDict.get("sequences") is not None:
+        for predicted_seq, original_seq in zip(sequence_token_list, SaProtInputDict["sequences"]):
+            original_seq = original_seq.split()
+            if len(predicted_seq) != len(original_seq):
+                raise ValueError("The predicted sequence length does not match the input sequence.")
+            for i, amino_acid in enumerate(original_seq):
+                if amino_acid != "#":
+                    predicted_seq[i] = amino_acid.upper()
 
     sequence_token_list = ["".join(sequence_token) for sequence_token in sequence_token_list]
 

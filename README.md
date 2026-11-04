@@ -95,7 +95,6 @@ seq = SaProtGeneration(saprot, SaProtInputDict, saprot_tokenizer, saprot_sample_
 # seq = SaProtGeneration(saprot, SaProtInputDict, saprot_tokenizer, saprot_sample_type="argmax")["sequence"]
 
 ```
-
 The above code makes predictions based on Foldseek tokens. If you want to convert a 3D structure file (e.g., .pdb or .mmcif) into Foldseek tokens, you should download the binary file from [here](https://drive.google.com/file/d/1B_9t3n_nlj8Y3Kpc_mMjtMdY0OPYa7Re/view) and place it in the assets/bin folder. The following code demonstrates how to use it.
 ```python
 from utils.foldseek_utils import get_struc_seq
@@ -106,6 +105,28 @@ print(f"foldseek_seq: {foldseek_seq}")
 # foldseek_seq: dfqka...ggvvd
 ```
 
+### Mask and redesign amino acid sequence with SaProt-O
+
+SaProt-O is trained with more varied input configurations than SaProt-T, making it better suited for protein redesign and editing. It predicts masked amino acids from partial sequences and Foldseek tokens, with optional text guidance. Use `#` for unknown positions in either input. See the [tutorial](https://github.com/westlake-repl/Denovo-Pinal/wiki/Tutorial#key-differences-between-saprot-t-and-saprot-o) for more details.
+
+The following example fills in masked residues with the prompt "actin" while keeping the known amino acids unchanged. 
+
+```python
+from utils.design_utils import SaProtPrepareGenerationInputs, SaProtGeneration, load_SaProtO_and_tokenizers
+
+saprot, saprot_text_tokenizer, saprot_tokenizer = load_SaProtO_and_tokenizers()
+desc = "actin"
+structure = "dplpfwakewedfqfwifidtfpdqggqdifgqkkwafpdpppcvpppddridgtvrrvvvvvgtdmdgqdalqagpdpvsvlvvvvcvacprvnhqqlrheyeyegaapydlvrllvvvccscpvsvhqwyayaylqlllcvlvvdqfawefeaalfwtkiwggdrsdtdnqlididrdhnvlllvllqvvvvvvvdhqddpnssvvssvcqlpqaaadldlvvqvvclvvdqpskdwdqdpvrdididtssrhvslccqqvvcsvpdpdhhslvsnvsslvsddpvrslvhqchyeyaydrvphhcpqvnsqvsncvvddvphdgdydydnvrncssvssvsplspdpvnpvlidgsvncvvppssvnvvrhd"
+sequence = "#D##I#####D#G#####AGFA#D#A###V#P####R###Q#####M######VG##AQ#K#########I###IVT###D###I#H#T##N#L###P#E###################TQ###########Y############G###G#V#######TH######G####H######L##R#LT######LT#############IVR####K#####L##E#EM#T###S####K##E#####V#T###E#########QPS####E#CG####TFN#####D##I##D#Y#############G#####Q###T##AP#####K####P####S##I#####A###TFQ####S#QEYDE#GP########"
+SaProtInputDict = SaProtPrepareGenerationInputs(
+    [" ".join(list(structure))], desc, saprot_text_tokenizer, saprot_tokenizer,
+    sequences=[" ".join(list(sequence))],
+)
+seq = SaProtGeneration(saprot, SaProtInputDict, saprot_tokenizer, saprot_sample_type="multinomial", multinomial_temperature=0.3)["sequence"]
+# For greedy decoding, use:
+# seq = SaProtGeneration(saprot, SaProtInputDict, saprot_tokenizer, saprot_sample_type="argmax")["sequence"]
+print(seq[0])
+```
 
 ### Computational evaluation of the de novo designed proteins
 
