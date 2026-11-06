@@ -2,4 +2,8 @@ omegaconf==2.3.0
 rich==13.9.4
 torch==2.2.1
 transformers==4.39.0
-deepspeed==0.14.0
+accelerate==0.28.0
+biopython==1.83
+filelock==3.16.1
+numpy==1.24.4
+tqdm==4.66.2

@@ -45,7 +45,7 @@ def load_T2Struct(cfg, model_name):
     model.load_state_dict(torch.load(os.path.join(MODEL_ROOT, model_name, T2STRUCT), map_location='cpu'))
 
     return model.to(DEVICE)
-    
+
     
 def load_T2Struct_tokenizers(cfg):
     text_tokenizer =  AutoTokenizer.from_pretrained(cfg.model["lm"])
@@ -115,6 +115,7 @@ def T2StructDefaultGenerationConfig(temperature):
         min_length=64,
     )
 
+@torch.no_grad()
 def T2StructPrepareGenerationInputs(t2struct, desc, text_tokenizer, structure_tokenizer):
     batch = {}
     desc_encodings = text_tokenizer(
@@ -254,7 +255,6 @@ def PinalDesign(desc, num, t2struct, text_tokenizer, structure_tokenizer, saprot
         saprot_res = SaProtGeneration(saprot, SaProtInputDict, saprot_tokenizer, saprot_sample_type, multinomial_temperature)
         sequences.extend(saprot_res["sequence"])
         sequences_logp.extend(saprot_res["sequence_logp"])
-        torch.cuda.empty_cache()
 
     res = list(zip(structures, structures_logp, sequences, sequences_logp))
     res = sorted(res, key=lambda x: (x[1] + x[3]) / len(x[2]) , reverse=True)  # sort by normed logp

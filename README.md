@@ -50,7 +50,7 @@ The `weights/Pinal` directory contains 4 models:
 
 ### Inference with Pinal
 
-Design protein from natural language instruction with only 3 lines of code!
+Design protein from natural language instruction with the following code!
 
 ```python
 from utils.design_utils import load_pinal, PinalDesign
